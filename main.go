@@ -23,9 +23,9 @@ func main() {
 	fsHandler := apiCfg.middlewareMetricsInc(http.StripPrefix("/app/", fileserver))
 	mux.Handle("/app/", fsHandler)
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
+	mux.HandleFunc("POST /api/validate_chirp", validate_chirp)
 	mux.HandleFunc("GET /admin/metrics", apiCfg.handlerMetrics)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
-	mux.HandleFunc("POST /api/validate_chirp", validate_chirp)
 
 	srv := &http.Server{
 		Addr:    ":8080",
@@ -34,11 +34,4 @@ func main() {
 
 	log.Printf("serving files on port %s\n", port)
 	log.Fatal(srv.ListenAndServe())
-}
-
-func health_check(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
-
 }
