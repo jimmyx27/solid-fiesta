@@ -6,10 +6,6 @@ import (
 	"sync/atomic"
 )
 
-type apiConfig struct {
-	fileserverHits atomic.Int32
-}
-
 func main() {
 	const filepathRoot = "."
 	const port = ":8080"
