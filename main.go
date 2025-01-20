@@ -3,23 +3,20 @@ package main
 import (
 	"log"
 	"net/http"
-	"sync/atomic"
 )
 
 func main() {
 	const filepathRoot = "."
 	const port = ":8080"
 
-	apiCfg := apiConfig{
-		fileserverHits: atomic.Int32{},
-	}
+	apiCfg := apiConfig{}
 
 	mux := http.NewServeMux()
 	fileserver := http.FileServer(http.Dir(filepathRoot))
 	fsHandler := apiCfg.middlewareMetricsInc(http.StripPrefix("/app/", fileserver))
 	mux.Handle("/app/", fsHandler)
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
-	mux.HandleFunc("POST /api/validate_chirp", validate_chirp)
+	mux.HandleFunc("POST /api/validate_chirp", handlerChirpsValidate)
 	mux.HandleFunc("GET /admin/metrics", apiCfg.handlerMetrics)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
