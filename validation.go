@@ -44,7 +44,7 @@ func validate_chirp(w http.ResponseWriter, r *http.Request) {
 		w.Write(dat)
 	}
 	resp := resp{
-		valid: "true",
+		Valid: true,
 	}
 	dat, err := json.Marshal(resp)
 	w.WriteHeader(200)
